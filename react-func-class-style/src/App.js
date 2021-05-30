@@ -33,11 +33,42 @@ function FuncComp (props) {
   const [_date, setDate] = useState((new Date()).toString());
 
 
+  // componentDidMount 만 호출 
+  useEffect(function(){
+    console.log('%cfunc => useEffect (componentDidMount)' +  (++funId), funcStyle);
+    document.title = number;
+
+    return function() {
+      console.log('%cfunc => useEffect return (componentDidMount' +  (++funId), funcStyle);
+    }
+  });
+
   // 첫번째인자 : 함수
   useEffect(function(){
-    console.log('%cfunc => useEffect (componentDidMount & componentDidUpdate)' +  (++funId), funcStyle);
-    document.title = number + ' : ' + _date;
-  });
+    console.log('%cfunc => useEffect number (componentDidMount & componentDidUpdate)' +  (++funId), funcStyle);
+    // document.title = number + ' : ' + _date;
+    document.title = number;
+
+
+    // clean up : return 값인 함수를 품고있는 함수가 다시 실행될때 실행된다 
+    // Specify how to clean up after this effect
+    return function() {
+      console.log('%cfunc => useEffect  number return (componentDidMount & componentDidUpdate)' +  (++funId), funcStyle);
+    }
+  },
+  // 배열안에있는 원소의 값인 상태만 바뀌었을때만 첫번째 인자인 콜백함수가 호출되도록 약속되어있다. 
+  [number]);
+
+
+  useEffect(function(){
+    console.log('%cfunc => useEffect date (componentDidMount & componentDidUpdate)' +  (++funId), funcStyle);
+    document.title = _date;
+     return function() {
+      console.log('%cfunc => useEffect _date return (componentDidMount & componentDidUpdate)' +  (++funId), funcStyle);
+    }
+  },
+  // 배열안에있는 원소의 값인 상태만 바뀌었을때만 첫번째 인자인 콜백함수가 호출되도록 약속되어있다. 
+  [_date]);
 
   return (
     <div className="container">
